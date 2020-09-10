@@ -29,7 +29,9 @@ button {
 }
 
 #leftArrow:hover, #rightArrow:hover {
-  fill: hsl(25, 100%, 50%);
+  fill: white;
+  stroke: black;
+  stroke-width: 2;
   transform: scale(.95, .95);
 }
 
@@ -47,8 +49,27 @@ button {
 .title {
   text-align: center;
   font-size: 2rem;
+  padding: .25rem;
   border-top: .2rem solid black;
   border-bottom: .2rem solid black;
+}
+
+h1 > a {
+  text-shadow: 0 0 .2rem black;
+}
+
+a {
+  color: white;
+  transition: all 250ms;
+}
+
+a:hover {
+  color: black;
+  text-shadow: 0 0 .1rem white,
+                0 0 .2rem white,
+                0 0 .4rem white,
+                0 0 .8rem white
+                !important;
 }
 
 .source {
@@ -68,7 +89,10 @@ nav > a {
 
 .shipping {
   margin: .5rem 0;
+  padding: .5rem 0;
   text-align: center;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
+  border-radius: .5rem;
 }
 
 .coinDiv {
@@ -86,6 +110,10 @@ nav > a {
 .coin {
   margin-left: 1rem;
   text-indent: -1rem;
+}
+
+.coin > a {
+  color: black;
 }
 
 .red {

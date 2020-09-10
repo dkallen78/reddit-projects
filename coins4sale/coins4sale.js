@@ -1,4 +1,9 @@
 fetch("https://www.reddit.com/r/Coins4Sale.json")
+  //----------------------------------------------------//
+  //Fetches the JSON data from Reddit                   //
+  //then sends the data to be cleaned                   //
+  //----------------------------------------------------//
+
   .then(function(response) {
     return response.json();
   })
@@ -66,49 +71,82 @@ function fixArrows() {
 }
 
 function crunch(pageData) {
-  //pageData.data.children[x]
-  //pageData.data.children[x].data.title
-  // /\[WTS\]/
-  //pageData.data.children[x].data.selftext
-  //pageData.data.children[x].data.title
-  //pageData.data.children[x].data.author
-  //pageData.data.children[x].data.url
-  //pageData.data.children[x].data.created_utc
+  //----------------------------------------------------//
+  //Cleans the JSON data from Reddit to be displayed    //
+  //  on the page                                       //
+  //object-> pageData: JSON from Reddit                 //
+  //----------------------------------------------------//
+
+  /*pageData.data.children[x]
+  pageData.data.children[x].data.title
+  pageData.data.children[x].data.selftext
+  pageData.data.children[x].data.title
+  pageData.data.children[x].data.author
+  pageData.data.children[x].data.url
+  pageData.data.children[x].data.created_utc*/
 
   let rawSale = [];
   pageData.data.children.forEach(function(post) {
+    //--------------------------------------------------//
+    //Extracts only the posts with "[WTS]" in the title //
+    //--------------------------------------------------//
+
     if (/\[WTS\]/.test(post.data.title)) {
       rawSale.push(post);
     }
   });
 
   let forSale = rawSale.map(function(post) {
+    //--------------------------------------------------//
+    //Further refines the data for presentation         //
+    //--------------------------------------------------//
+
     let info = {
       title: post.data.title,
-      author: post.data.author,
       url: post.data.url,
+      author: post.data.author,
+      date: post.data.created_utc,
+      shipping: "",
       items: [],
-      shipping: ""
     }
 
     let roughList = [];
     post.data.selftext.split(/\n/).forEach(function(line) {
-      if (/\$/.test(line)) {
+      //------------------------------------------------//
+      //Breaks up the text of the post by lines to      //
+      //  select only those that are relevant           //
+      //------------------------------------------------//
+
+      let shipping = /google|venmo|ppff|paypal|ebay|shipping/i;
+      if (shipping.test(line)) {
+        info.shipping = line;
+      } else if (/\$|dollar|usd/i.test(line)) {
+        //----------------------------------------------//
+        //Removes unneeded characters and keeps only    //
+        //  the lines that contain "$"                  //
+        //----------------------------------------------//
+
         let cleaner = /[~|*]/ig
         line = line.replace(cleaner, " ");
-        roughList.push(line);
+        info.items.push(line);
       }
     });
 
-    roughList.forEach(function(item) {
+    /*roughList.forEach(function(item) {
+      //------------------------------------------------//
+      //Finds the line with shipping information and    //
+      //  stores it separately, all other lines are     //
+      //  pushed to a "clean" array                     //
+      //------------------------------------------------//
+
       let shipping = /google|venmo|ppff|paypal|ebay|shipping/i;
       if (shipping.test(item)) {
         info.shipping = item;
       } else {
         info.items.push(item);
       }
-    });
-
+    });*/
+    console.log(info);
     return info;
   })
 
@@ -119,38 +157,69 @@ function crunch(pageData) {
 }
 
 function display(forSale) {
+  //----------------------------------------------------//
+  //Displays the fetched post data on the page          //
+  //array-> forSale: array of objects representing the  //
+  //  latest posts on r/coins4sale                      //
+  //----------------------------------------------------//
 
   forSale.forEach(function(post, index) {
+    //--------------------------------------------------//
+    //Does the work of taking the array data and putting//
+    //  it on the page                                  //
+    //--------------------------------------------------//
+
     let postDiv = makeElement("div", `post${index}`, "postDiv");
-
+    //
+    //Title of the post
     let title = makeElement("h1", `title${index}`, "title");
-      title.innerHTML = post.title;
+      let link = makeElement("a");
+        link.href = post.url;
+        link.innerHTML = post.title;
+      title.appendChild(link);
     postDiv.appendChild(title);
-
+    //
+    //Author and date of the post
     let sourceDiv = makeElement("nav", `src${index}`, "source");
       let author = makeElement("a");
         author.href = `https://www.reddit.com/user/${post.author}/`;
         author.innerHTML = post.author;
       sourceDiv.appendChild(author);
 
-      let link = makeElement("a");
-        link.href = post.url;
-        link.innerHTML = "Original post";
-      sourceDiv.appendChild(link);
+      let postDate = new Date(post.date * 1000);
+      let dateSpan = makeElement("span");
+        dateSpan.innerHTML = postDate.toDateString();
+      sourceDiv.appendChild(dateSpan);
     postDiv.appendChild(sourceDiv);
-
+    //
+    //Shipping information
     let shipping = makeElement("div", `shipping${index}`, "shipping");
       shipping.innerHTML = post.shipping;
     postDiv.appendChild(shipping);
-
+    //
+    //List of the items for sale
     let coinDiv = makeElement("div", `coinDiv${index}`, "coinDiv");
       post.items.forEach(function(coin) {
         if (!/sold/i.test(coin)) {
+          //--------------------------------------------//
+          //Filters out any listings that are marked    //
+          //  as sold                                   //
+          //--------------------------------------------//
+          //
+          //Removes brackets from the listings
+          coin = coin.replace(/\[|\]/g, "");
+          //
+          //Reformats the links
+          let links = /http[a-z0-9:/\.]*/i;
+          coin = coin.replace(links, " <a href='$&'>link</a> ")
+          //
+          //Displays the listing in the page
           let span = makeElement("span", "", "coin");
             span.innerHTML = coin;
           coinDiv.appendChild(span);
         }
       });
+
     postDiv.appendChild(coinDiv);
     document.body.appendChild(postDiv);
   });
@@ -159,8 +228,15 @@ function display(forSale) {
 }
 
 function initialize() {
+  //----------------------------------------------------//
+  //Does the work of setting up the slider elements     //
+  //----------------------------------------------------//
 
   function changeDiv(index) {
+    //--------------------------------------------------//
+    //Changes the positions of the posts whenever an    //
+    //  arrow button is clicked                         //
+    //--------------------------------------------------//
 
     //
     //post, 1 left
