@@ -1,0 +1,89 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25rem;
+  overflow: hidden;
+}
+
+#buttonDiv {
+  display: flex;
+  justify-content: space-between;
+  width: 100vw;
+  height: 100vh;
+}
+
+button {
+  background: none;
+  border: none;
+  z-index: 1;
+}
+
+#leftArrow, #rightArrow {
+  height: 8vw !important;
+  width: 8vw !important;
+  z-index: 1;
+  transition: fill 500ms, opacity 500ms, transform 250ms;
+}
+
+#leftArrow:hover, #rightArrow:hover {
+  fill: hsl(50, 100%, 70%);
+  transform: scale(.95, .95);
+}
+
+.postDiv {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 95vh;
+  width: 75vw;
+  filter: opacity(0);
+  z-index: 0;
+  transition: all 500ms;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  border-top: .2rem solid black;
+  border-bottom: .2rem solid black;
+}
+
+.source {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: .5rem;
+  font-size: 1.5rem;
+}
+
+nav > span {
+
+}
+
+nav > a {
+
+}
+
+.shipping {
+  margin: .5rem 0;
+  text-align: center;
+}
+
+.coinDiv {
+  display: flex;
+  flex-direction: column;
+  max-height: 50vh;
+  padding: 1rem;
+  border: .2rem solid black;
+  border-radius: .5rem;
+  overflow-y: scroll;
+}
+
+.coin {
+
+}
+
+.red {
+  background-color: red;
+  color: white;
+}
