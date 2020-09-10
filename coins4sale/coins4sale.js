@@ -1,4 +1,4 @@
-fetch("https://www.reddit.com/r/Coins4Sale.json")
+fetch("https://www.reddit.com/r/Coins4Sale/new.json")
   //----------------------------------------------------//
   //Fetches the JSON data from Reddit                   //
   //then sends the data to be cleaned                   //
@@ -117,9 +117,9 @@ function crunch(pageData) {
       //  select only those that are relevant           //
       //------------------------------------------------//
 
-      let shipping = /google|venmo|ppff|paypal|ebay|shipping/i;
+      let shipping = /google|venmo|ppff|paypal|ebay|shipping|ship$|tracked|insured/i;
       if (shipping.test(line)) {
-        info.shipping = line;
+        info.shipping += ` ${line}`;
       } else if (/\$|dollar|usd/i.test(line)) {
         //----------------------------------------------//
         //Removes unneeded characters and keeps only    //
@@ -132,21 +132,6 @@ function crunch(pageData) {
       }
     });
 
-    /*roughList.forEach(function(item) {
-      //------------------------------------------------//
-      //Finds the line with shipping information and    //
-      //  stores it separately, all other lines are     //
-      //  pushed to a "clean" array                     //
-      //------------------------------------------------//
-
-      let shipping = /google|venmo|ppff|paypal|ebay|shipping/i;
-      if (shipping.test(item)) {
-        info.shipping = item;
-      } else {
-        info.items.push(item);
-      }
-    });*/
-    console.log(info);
     return info;
   })
 
@@ -210,7 +195,7 @@ function display(forSale) {
           coin = coin.replace(/\[|\]/g, "");
           //
           //Reformats the links
-          let links = /http[a-z0-9:/\.]*/i;
+          let links = /http[a-z0-9:/\.]*/ig;
           coin = coin.replace(links, " <a href='$&'>link</a> ")
           //
           //Displays the listing in the page
