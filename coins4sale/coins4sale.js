@@ -46,6 +46,25 @@ function vw(v) {
   return (v * w) / 100;
 }
 
+function fixArrows() {
+  //----------------------------------------------------//
+  //Resizes the navigation arrows whenever the users    //
+  //  window is resized                                 //
+  //----------------------------------------------------//
+
+  let side = vw(10);
+
+  let leftArrow = document.getElementById("leftArrow");
+  let length = side - (side * .866);
+  let points = `${side},0 ${side},${side} ${length},${side / 2} ${side},0`;
+  leftArrow.children[0].setAttribute("points", points);
+
+  let rightArrow = document.getElementById("rightArrow");
+  length = side * .866;
+  points = `0,0 0,${side} ${length},${side / 2} 0,0`;
+  rightArrow.children[0].setAttribute("points", points);
+}
+
 function crunch(pageData) {
   //pageData.data.children[x]
   //pageData.data.children[x].data.title
@@ -75,11 +94,12 @@ function crunch(pageData) {
     let roughList = [];
     post.data.selftext.split(/\n/).forEach(function(line) {
       if (/\$/.test(line)) {
+        let cleaner = /[~|*]/ig
+        line = line.replace(cleaner, " ");
         roughList.push(line);
       }
     });
 
-    let cleanList = [];
     roughList.forEach(function(item) {
       let shipping = /google|venmo|ppff|paypal|ebay|shipping/i;
       if (shipping.test(item)) {
@@ -91,6 +111,8 @@ function crunch(pageData) {
 
     return info;
   })
+
+  forSale = forSale.filter(post => post.items.length > 0);
 
   console.log(forSale);
   display(forSale);
@@ -106,7 +128,8 @@ function display(forSale) {
     postDiv.appendChild(title);
 
     let sourceDiv = makeElement("nav", `src${index}`, "source");
-      let author = makeElement("span");
+      let author = makeElement("a");
+        author.href = `https://www.reddit.com/user/${post.author}/`;
         author.innerHTML = post.author;
       sourceDiv.appendChild(author);
 
@@ -206,6 +229,13 @@ function initialize() {
   button.appendChild(rightArrow);
   buttonDiv.appendChild(button);
   document.body.appendChild(buttonDiv);
+
+  //
+  //When the window resizes, the navigation
+  //  arrows resize as well.
+  window.onresize = function() {
+    fixArrows();
+  }
 
   changeDiv(0);
 }

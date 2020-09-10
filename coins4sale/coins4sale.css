@@ -3,7 +3,9 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 1.25rem;
+  color: white;
   overflow: hidden;
+  background-image: linear-gradient(to right, green, chartreuse 150%);
 }
 
 #buttonDiv {
@@ -27,7 +29,7 @@ button {
 }
 
 #leftArrow:hover, #rightArrow:hover {
-  fill: hsl(50, 100%, 70%);
+  fill: hsl(25, 100%, 50%);
   transform: scale(.95, .95);
 }
 
@@ -76,11 +78,14 @@ nav > a {
   padding: 1rem;
   border: .2rem solid black;
   border-radius: .5rem;
+  color: black;
   overflow-y: scroll;
+  background-color: white;
 }
 
 .coin {
-
+  margin-left: 1rem;
+  text-indent: -1rem;
 }
 
 .red {
