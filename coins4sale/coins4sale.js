@@ -117,7 +117,7 @@ function crunch(pageData) {
       //  select only those that are relevant           //
       //------------------------------------------------//
 
-      let shipping = /google|venmo|ppff|paypal|ebay|shipping|ship$|tracked|insured/i;
+      let shipping = /google|venmo|ppff|paypal|ebay|shipping|^ship$|tracked|insured/i;
       if (shipping.test(line)) {
         info.shipping += ` ${line}`;
       } else if (/\$|dollar|usd/i.test(line)) {
@@ -173,7 +173,8 @@ function display(forSale) {
 
       let postDate = new Date(post.date * 1000);
       let dateSpan = makeElement("span");
-        dateSpan.innerHTML = postDate.toDateString();
+        let clockTime = `${postDate.getHours()}:${postDate.getMinutes().toString().padStart(2, "0")}`;
+        dateSpan.innerHTML = `${postDate.toDateString()} ${clockTime}`;
       sourceDiv.appendChild(dateSpan);
     postDiv.appendChild(sourceDiv);
     //
