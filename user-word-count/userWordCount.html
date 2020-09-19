@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+      Reddit User Word Count
+    </title>
+    <link rel="stylesheet" href="userWordCount.css">
+  </head>
+  <body>
+    <div id="input">
+      <div id="user">
+        <label for="textBox">
+          User:
+        </label>
+        <input type="text" id="textBox" name="textBox">
+        <button id="launchButton" onclick="searchit()">
+          Go
+        </button>
+      </div>
+
+      <!--<div id="sortByDiv">
+        <label for="sortBy">
+          Sort by:
+        </label>
+        <select name="sortBy" id="sortBy">
+          <option value="/overview" selected>Overview</option>
+          <option value="/comments">Comments</option>
+          <option value="/top">Top</option>
+          <option value="/rising">Rising</option>
+          <option value="/controversial">Controversial</option>
+        </select>
+      </div>-->
+    </div>
+    <div id="results">
+    </div>
+  </body>
+  <script src="userWordCount.js">
+  </script>
+</html>
