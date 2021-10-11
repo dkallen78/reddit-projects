@@ -1,0 +1,35 @@
+body {
+  background-color: black;
+}
+
+#pageTitle {
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.titles {
+  display: flex;
+  align-items: center;
+  padding: .5rem;
+  margin: 1.5rem;
+  background-color: white;
+  font-size: 1.5rem;
+  border: .2rem solid black;
+  border-radius: .5rem;
+  box-shadow: inset .1rem .1rem 1rem;
+  background-clip: padding-box;
+}
+
+.titles > span {
+  padding: .5rem;
+  margin-right: 1rem;
+  color: white;
+  background-color: black;
+  border-radius: 2rem;
+}
+
+.titles > a {
+  text-decoration: none;
+  color: black;
+}
